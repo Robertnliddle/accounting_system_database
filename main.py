@@ -1,3 +1,6 @@
+import os.path
+import json
+
 balance = 0
 warehouse = {}
 history = []
@@ -18,51 +21,43 @@ commands_add_sub_msg = """Select if you want to add or subtract to the balance
 - subtract"""
 
 
-balance_file = "balance.txt"
-inventory_file = "inventory.txt"
-history_file = "history.txt"
+def load_warehouse(warehouse):
+    if not os.path.exists("warehouse.json"):
+        return []
+    with open("warehouse.json") as f:
+        warehouse = json.load(f)
+    return warehouse
 
 
-def load_warehouse(warehouse_file_path):
-    warehouse = {}
-    with open(warehouse_file_path) as f:
-        for row in f:
-            product_name, quantity = row.strip().split(":")
-
-            if product_name and quantity in warehouse:
-                print(f"Warning: Duplicate value of {product_name}")
-
-            warehouse[product_name] = {
-                "product": product_name,
-                "quantity": quantity,
-            }
-        return warehouse
+def save_warehouse(warehouse):
+    with open("warehouse.json", "w") as f:
+        json.dump(warehouse, f)
 
 
-# def save_library(warehouse, product_name, quantity, warehouse_file_path):
-    # with open(warehouse_file_path, "w") as f:
-        # for product_name, quantity in warehouse.items():
-            # f.write("{}:{}\n".format(product_name["product_name"], quantity["quantity"]))
+def load_history(history):
+    if not os.path.exists("history.json"):
+        return []
+    with open("history.json") as f:
+        history = json.load(f)
+    return history
 
 
-def transaction(amount, item, transaction):
-    balance = 0
-    if transaction == "purchase":
-        balance -= amount
-        inventory[item] - inventory.get(item) + 1
-    elif transaction == "sale":
-        balance += amount
-        inventory[item] - inventory.get(item) - 1
-    history.append(f"amount: {amount} item: {item} transaction: {transaction}")
+def save_history(history):
+    with open("history.json", "w") as f:
+        json.dump(warehouse, f)
 
 
-def save_data():
-    with open(balance_file, "w") as f:
-        f.write(str(balance))
-    with open(history_file, "w") as f:
-        f.write(str(history))
-    with open(inventory_file, "w") as f:
-        f.write(str(inventory))
+def load_balance(balance):
+    if not os.path.exists("balance.json"):
+        return 0
+    with open("balance.json") as f:
+        balance = json.load(f)
+    return balance
+
+
+def save_balance(balance):
+    with open("balance.json", "w") as f:
+        json.dump(balance, f)
 
 
 while True:
