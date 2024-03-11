@@ -1,11 +1,6 @@
 import os.path
 import json
 
-balance = 0
-warehouse = {}
-history = []
-inventory = {}
-
 commands_list_msg = """Select a command: 
 - balance: add or subtract from the account
 - sale: name of product, quantity and update the warehouse accordingly
@@ -21,9 +16,9 @@ commands_add_sub_msg = """Select if you want to add or subtract to the balance
 - subtract"""
 
 
-def load_warehouse(warehouse):
+def load_warehouse():
     if not os.path.exists("warehouse.json"):
-        return []
+        return {}
     with open("warehouse.json") as f:
         warehouse = json.load(f)
     return warehouse
@@ -34,7 +29,7 @@ def save_warehouse(warehouse):
         json.dump(warehouse, f)
 
 
-def load_history(history):
+def load_history():
     if not os.path.exists("history.json"):
         return []
     with open("history.json") as f:
@@ -44,10 +39,10 @@ def load_history(history):
 
 def save_history(history):
     with open("history.json", "w") as f:
-        json.dump(warehouse, f)
+        json.dump(history, f)
 
 
-def load_balance(balance):
+def load_balance():
     if not os.path.exists("balance.json"):
         return 0
     with open("balance.json") as f:
@@ -58,6 +53,11 @@ def load_balance(balance):
 def save_balance(balance):
     with open("balance.json", "w") as f:
         json.dump(balance, f)
+
+
+balance = load_balance()
+warehouse = load_warehouse()
+history = load_history()
 
 
 while True:
@@ -138,3 +138,7 @@ while True:
             print(entry)
     else:
         print(f"The command are not supported {action}. Please select another command.")
+
+save_balance(balance)
+save_history(history)
+save_warehouse(warehouse)
